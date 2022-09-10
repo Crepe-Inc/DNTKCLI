@@ -165,7 +165,7 @@ public class PacketProcessor
             
             var type = packet.PacketType;
 
-            //Log.Information($"{count++} {type}");
+            Log.Information($"{count++} {type}");
 
             if (type == Opcode.GetPlayerTokenRsp)
             {
@@ -272,10 +272,10 @@ public class PacketProcessor
         {
 
             Dictionary<string, object> jsonobj = new();
-            jsonobj.Add("PacketHead", Metadata);
-            jsonobj.Add("PacketData", PacketData);
-            jsonobj.Add("CmdID", PacketType.ToString());
-            jsonobj.Add("Sender", (int)Sender);
+            jsonobj.Add("time", Metadata.SentMs);
+            jsonobj.Add("data", DummyPacketData);
+            jsonobj.Add("cmd", PacketType.ToString());
+            jsonobj.Add("sender", (int)Sender);
 
             return jsonobj;
         }

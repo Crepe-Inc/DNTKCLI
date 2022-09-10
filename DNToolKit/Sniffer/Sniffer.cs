@@ -54,7 +54,6 @@ public class Sniffer
             //i guessed this lmfao
             bs.Sort((x, y)=>x.Timeval.Date.Ticks < y.Timeval.Date.Ticks ? -1 : 1);
 
-            var a = new List<string>();
 
             var count = 0;
             Log.Information("Found {amt} raw packets", bs.Count);
@@ -64,7 +63,6 @@ public class Sniffer
             {
                 
                 //slay
-                a.Add($"{rawCapture.Timeval.Date.Ticks}");
 
                 var udpPacket = PacketDotNet.Packet.ParsePacket(LinkLayers.Ethernet,
                         rawCapture.Data)
@@ -73,23 +71,25 @@ public class Sniffer
                 var packetBytes = udpPacket.PayloadData;
                 
                 
-                a.Add($"{Convert.ToHexString(packetBytes)}");
 
                 count++;
                 _udpHandler.HandleRawCapture(rawCapture);
                 //first 50 ish packets hopefully has tokenrsp in it
                 if (count == 500)
                 {
-                    count = 0;
+                    // count = 0;
                     // Task.Yield();// what the fuck?
                     // i really fucking hate this
-                    Task.Delay(1).Wait();
+                    // Task.Delay(1).Wait();
                     // Log.Information("Waiting...");
                 }
             }
             stop.Stop();
-            
-            Log.Information("Done! {f}", (stop.ElapsedMilliseconds*100)/bs.Count);
+
+            if (bs.Count < 1)
+            {
+                return;
+            }
         }
     }//>DNTKCLI.exe "C:\Users\admin\Documents\Github\DNToolKit\DNToolKit\bin\Debug\net6.0\Captures\2.8_9-08-2022_02-07-21.pcap" "aafaf.dntkap"
     

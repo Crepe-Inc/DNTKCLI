@@ -21,7 +21,7 @@ public class OutputManager
     {
         // b.Serialize(file, packet.GetObj());
         var dat = JsonConvert.SerializeObject(packet.GetObj());
-        if (dat.Length <= 100)
+        if (dat.Length <= 10)
         {
             Console.WriteLine(Enum.GetName(packet.PacketType));
             return;
