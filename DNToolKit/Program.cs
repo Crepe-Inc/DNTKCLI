@@ -23,12 +23,7 @@ public class Program
 
     public static void Main(string[] args)
     {
-//todo: remove this
-        args = new[]
-        {
-            @"C:\Users\admin\Documents\Github\DNToolKit\DNToolKit\bin\Debug\net6.0\Captures\2.8_9-08-2022_02-07-21.pcap",
-            "aafaf.dntkap"
-        };
+
         
         Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console().CreateLogger();
         Log.Information("DNToolKit CLI for v3.0");
