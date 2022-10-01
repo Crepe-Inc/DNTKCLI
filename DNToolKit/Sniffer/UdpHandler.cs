@@ -19,6 +19,12 @@ public class UdpHandler
         _processor = new PacketProcessor();
     }
 
+    public PacketProcessor GetProcessor()
+    {
+        //channelling my inner java dev tbh
+        return _processor;
+    }
+
     public void HandleRawCapture(RawCapture rawCapture)
     {
         var udpPacket = PacketDotNet.Packet.ParsePacket(LinkLayers.Ethernet,
@@ -56,7 +62,7 @@ public class UdpHandler
                             //i will not stop the processor bc im really really sad rn
                             Log.Information($"{sender} disconnected");
                             //start the loop
-                            _processor.Start();
+                            //_processor.Start();
                         }
                         break;
                     case 0xFF:                                  

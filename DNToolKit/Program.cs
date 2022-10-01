@@ -55,10 +55,13 @@ public class Program
 
         Log.Information("Ready! Hit Control + C to stop...");
         
-        Task.Run(() =>
-        {
-            Sniffer.AddPcap(args[0]);
-        }).Wait();
+        Sniffer.AddPcap(args[0]);
+
+        Console.WriteLine("Press a key to start processing if a disconnect handshake wasn't sent.");
+        Console.ReadKey(true);
+        
+        
+        Sniffer.GetHandler().GetProcessor().Start();
         
 
         //Capture.ParseFromBytes(File.ReadAllBytes("./Captures/"));

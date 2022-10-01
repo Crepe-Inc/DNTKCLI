@@ -17,6 +17,11 @@ public class Sniffer
 
     private object lockObject = new();
 
+    public UdpHandler GetHandler()
+    {
+        //channeling my inner java dev tbh
+        return _udpHandler;
+    }
     public void OnPacketArrival(object sender, PacketCapture e)
     {
         _udpHandler.HandleRawCapture(e.GetPacket());

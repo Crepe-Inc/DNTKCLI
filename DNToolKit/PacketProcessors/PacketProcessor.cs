@@ -1,45 +1,36 @@
-﻿using System.Buffers.Text;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
 using Common;
 using Common.Protobuf;
-using DNToolKit.Frontend;
 using DNToolKit.Packet;
 using DNToolKit.Sniffer;
-using Newtonsoft.Json;
 using Serilog;
 
 namespace DNToolKit.PacketProcessors;
 
 public class PacketProcessor
 {
-    private readonly ConcurrentQueue<EncryptedPacket> Queue = new();
+    private readonly ConcurrentQueue<EncryptedPacket> _queue = new();
 
     private static readonly RSA ClientPrivate = RSA.Create();
     private MTKey? _key;
     private ValueFlag<MTKey> _sessionKey = new();
   
 
-    private bool _useSessionKey = false;
-    private ValueFlag<ulong> _tokenReqSendTime = new ValueFlag<ulong>();
-    private ValueFlag<ulong> _tokenRspServerKey = new ValueFlag<ulong>();
+    private bool _useSessionKey;
+    private ValueFlag<ulong> _tokenReqSendTime = new();
+    private ValueFlag<ulong> _tokenRspServerKey = new();
     
 
     private byte _timesBFed;
-    bool _running;
-
-    private long count = 0;
 
     public int len()
     {
-        return Queue.Count;
+        return _queue.Count;
     }
     public PacketProcessor()
     {
-        _running = false;
         //todo: take from a file
         ClientPrivate.FromXmlString(Program.Config.ClientPrivateRSA);
         
@@ -48,10 +39,9 @@ public class PacketProcessor
 
     public void Start()
     {
-        _running = true;
         var stop = new Stopwatch();
         stop.Start();
-        var count = Queue.Count;
+        var count = _queue.Count;
 
         Work();
         stop.Stop();
@@ -62,26 +52,25 @@ public class PacketProcessor
 
     public void Reset()
     {
-        Queue.Clear();
+        _queue.Clear();
         _tokenRspServerKey = new ValueFlag<ulong>();
         _tokenReqSendTime = new ValueFlag<ulong>();
         _useSessionKey = false;
         _sessionKey = new ValueFlag<MTKey>();
         _key = null;
         _timesBFed = 0;
-        count = 0;
     }
 
     public void AddPacket(byte[] data, UdpHandler.Sender sender)
     {
-        Queue.Enqueue(new EncryptedPacket(data, sender));
+        _queue.Enqueue(new EncryptedPacket(data, sender));
     }
 
     private void Work()
     {
         Log.Information("Processing Packets!");
         //we only start this thread after
-        while (Queue.TryDequeue(out var encryptedPacket))
+        while (_queue.TryDequeue(out var encryptedPacket))
             {
 
                 // File.AppendAllText("./ihatelifept2.txt", $"{encryptedPacket}\n");

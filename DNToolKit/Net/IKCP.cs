@@ -9,7 +9,8 @@ using System.Net;
 // ReSharper disable NotAccessedField.Local
 // ReSharper disable ArrangeTypeMemberModifiers
 
-
+//i am not bothering with this lol
+#pragma warning disable
 //please use a lock for most of these functions
 //its 100% not thread safe i think
 #pragma warning disable CS8600
@@ -1170,3 +1171,4 @@ public class IKCP
         // Console.WriteLine(mask + String.Format(format, args));
     }
 }
+#pragma warning restore
