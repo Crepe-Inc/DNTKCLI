@@ -23,15 +23,6 @@ public class Program
 
     public static void Main(string[] args)
     {
-        #if DEBUG
-        args = new[]
-        {
-            @"C:\Users\admin\Documents\Github\DNToolKit\DNToolKit\bin\Debug\net6.0\Captures\2.8_9-08-2022_02-07-21.pcap",
-            @".\out.dntkap"
-        };
-        #endif
-
-        
         Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
         Log.Information("DNToolKit CLI for v3.0");
         if (args.Length < 2)
