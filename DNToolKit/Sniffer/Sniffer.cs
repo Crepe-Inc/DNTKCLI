@@ -57,39 +57,12 @@ public class Sniffer
 
             var count = 0;
             Log.Information("Found {amt} raw packets", bs.Count);
-            var stop = new Stopwatch();
-            stop.Start();
             foreach (var rawCapture in bs)
             {
-                
-                //slay
-
-                var udpPacket = PacketDotNet.Packet.ParsePacket(LinkLayers.Ethernet,
-                        rawCapture.Data)
-                    .Extract<IPv4Packet>()
-                    .Extract<UdpPacket>();
-                var packetBytes = udpPacket.PayloadData;
-                
-                
-
-                count++;
                 _udpHandler.HandleRawCapture(rawCapture);
                 //first 50 ish packets hopefully has tokenrsp in it
-                if (count == 500)
-                {
-                    // count = 0;
-                    // Task.Yield();// what the fuck?
-                    // i really fucking hate this
-                    // Task.Delay(1).Wait();
-                    // Log.Information("Waiting...");
-                }
             }
-            stop.Stop();
 
-            if (bs.Count < 1)
-            {
-                return;
-            }
         }
     }//>DNTKCLI.exe "C:\Users\admin\Documents\Github\DNToolKit\DNToolKit\bin\Debug\net6.0\Captures\2.8_9-08-2022_02-07-21.pcap" "aafaf.dntkap"
     

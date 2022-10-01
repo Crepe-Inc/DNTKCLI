@@ -44,10 +44,7 @@ public class UdpHandler
 
                         if (sender == Sender.Server)
                         {
-                            Log.Debug("Server Handshake : {Conv}, {Token}", conv, token);
-                            _processor.Reset();
-                            _client?.Stop();
-                            _server?.Stop();
+                            Log.Information("Server Handshake : {Conv}, {Token}", conv, token);
                             _client = new KCP(conv, token,Sender.Client,_processor);
                             _server = new KCP(conv, token,Sender.Server,_processor);
                         }
@@ -57,8 +54,9 @@ public class UdpHandler
                         if (_client is not null)
                         {
                             //i will not stop the processor bc im really really sad rn
-                            
                             Log.Information($"{sender} disconnected");
+                            //start the loop
+                            _processor.Start();
                         }
                         break;
                     case 0xFF:                                  
@@ -90,9 +88,6 @@ public class UdpHandler
 
     public void Close()
     {
-        _client?.Stop();
-        _server?.Stop();
-        _processor.Stop();
         Log.Information("UdpHandler stopped...");
     }
 }

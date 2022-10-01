@@ -14,7 +14,6 @@
      private PacketProcessor _processor;
 
 
-     private bool _running = false;
      private UdpHandler.Sender user;
      
      public KCP(uint conv, uint token, UdpHandler.Sender user, PacketProcessor processor)
@@ -30,16 +29,11 @@
              return;
          });
          _processor = processor;
-         _running = true;
-
-         Task.Run(Loop);
      }
 
 
-     public byte[][] RecieveAll()
+     public void RecieveAll()
      {
-         List<byte[]> recvList = new();
-
          byte[]? recv;
          do
          {
@@ -49,12 +43,11 @@
                  break;
              }
 
-             recvList.Add(recv);
+             _processor.AddPacket(recv,user);
 
          } while (recv != null);
          
          //not sure if i need this to copy it but im going to be safe
-         return recvList.ToArray();
      }
 
 
@@ -88,29 +81,18 @@
 
          lock (lockObj)
          {
+             RecieveAll();
              return _ikcp.Input(buff, 0, buff.Length);
          }
 
      }
-     
-     public void Stop()
+     public void Update()
      {
-         _running = false;
-     }
-     public async Task Loop()
-     {
-         while (_running)
+         lock (lockObj)
          {
-             var recvArr = RecieveAll();
-             foreach (var packets in recvArr)
-             {
-                 _processor.AddPacket(packets, this.user);
-             }
-             await Task.Delay(1);
-
+             _ikcp.Update(Program.Now());
          }
      }
-
  }
 
 /*

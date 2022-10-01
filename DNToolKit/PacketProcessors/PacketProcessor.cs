@@ -27,7 +27,6 @@ public class PacketProcessor
     private ValueFlag<ulong> _tokenReqSendTime = new ValueFlag<ulong>();
     private ValueFlag<ulong> _tokenRspServerKey = new ValueFlag<ulong>();
     
-    private Thread _workingThread;
 
     private byte _timesBFed;
     bool _running;
@@ -40,16 +39,25 @@ public class PacketProcessor
     }
     public PacketProcessor()
     {
-        _running = true;
+        _running = false;
         //todo: take from a file
         ClientPrivate.FromXmlString(Program.Config.ClientPrivateRSA);
         
-        _workingThread = new Thread(Work)
-        {
-            Name = "PacketProcessor",
-        };
-        _workingThread.Start();
         _timesBFed = 0;
+    }
+
+    public void Start()
+    {
+        _running = true;
+        var stop = new Stopwatch();
+        stop.Start();
+        var count = Queue.Count;
+
+        Work();
+        stop.Stop();
+
+        Console.WriteLine("Done! Processed {0} packets in {1} seconds", count, stop.ElapsedMilliseconds/1000d);
+
     }
 
     public void Reset()
@@ -66,86 +74,66 @@ public class PacketProcessor
 
     public void AddPacket(byte[] data, UdpHandler.Sender sender)
     {
-        if(!_workingThread.IsAlive) _workingThread.Start();
         Queue.Enqueue(new EncryptedPacket(data, sender));
-    }
-    public void Stop()
-    {
-        if (_workingThread.IsAlive)
-        {
-            _running = false;
-            _workingThread.Join();
-            
-            // if(!_workingThread.Join(10000)) _workingThread.Interrupt();
-        }
-        Log.Information("PacketProcessor stopped...");
-        Log.Information($"{Queue.Count} packets leftover...");
-
     }
 
     private void Work()
     {
-        while (_running)
-        {
-            while (Queue.TryDequeue(out var encryptedPacket))
+        Log.Information("Processing Packets!");
+        //we only start this thread after
+        while (Queue.TryDequeue(out var encryptedPacket))
             {
 
                 // File.AppendAllText("./ihatelifept2.txt", $"{encryptedPacket}\n");
 
-                    var item = encryptedPacket.Data;
+                var item = encryptedPacket.Data;
+                {
+                    if(!_useSessionKey){
+                        _key ??= KeyRecovery.FindKey(item);
+                        _key?.Crypt(item);
+                    }
+                    else
                     {
-                        if(!_useSessionKey){
-                            _key ??= KeyRecovery.FindKey(item);
-                            _key?.Crypt(item);
-                        }
-                        else
+                        if(!_sessionKey.HasBeenSet())
                         {
-                            if(!_sessionKey.HasBeenSet())
+                            Log.Debug("Bruteforcing Key...");
+                            //Program.TestBF((long)tokenReqSendTime, tokenRspServerKey, item);
+                            _timesBFed++;
+                            Task.WaitAll(new Task[]
                             {
-                                Log.Debug("Bruteforcing Key...");
-                                //Program.TestBF((long)tokenReqSendTime, tokenRspServerKey, item);
-                                _timesBFed++;
-                                Task.WaitAll(new Task[]
-                                {
-                                    _tokenReqSendTime.TaskFlag(),
-                                    _tokenRspServerKey.TaskFlag()
-                                });
-                                _sessionKey.SetValue(KeyBruteForcer.BruteForce(item, (long)_tokenReqSendTime.Value, _tokenRspServerKey.Value));
-                            }
-                            if(!_sessionKey.HasBeenSet()) Log.Warning("something went wrong!");
-                            _sessionKey.Value?.Crypt(item);
-                            
-                            if (_timesBFed > 10)
-                            {
-                                Log.Error("Brute forcing has failed many times, so make sure you login on a freshly launched client. Or something else could have happened idk");
-                                Program.Stop();
-                            }
+                                _tokenReqSendTime.TaskFlag(),
+                                _tokenRspServerKey.TaskFlag()
+                            });
+                            _sessionKey.SetValue(KeyBruteForcer.BruteForce(item, (long)_tokenReqSendTime.Value, _tokenRspServerKey.Value));
                         }
-                        if (item.GetUInt16(0, true) == 0x4567)
+                        if(!_sessionKey.HasBeenSet()) Log.Warning("something went wrong!");
+                        _sessionKey.Value?.Crypt(item);
+                        
+                        if (_timesBFed > 10)
                         {
-                            ParsePacketFromData(encryptedPacket);
-                        }
-                        else if(!_sessionKey.HasBeenSet())
-                        {
-                            //we may need to bruteforce
-                            Log.Warning("Encrypted Packet got through lol");
-                            // _sessionKey.TaskFlag().Wait();
-                            //should be fine because we store the time 
-                            //Queue.Enqueue(encryptedPacket);
-                        }
-                        else
-                        {
-                          Log.Warning("There was a false positive with the bruteforcer somehow");
-                          Log.Information("@{slay}" ,encryptedPacket.Data);
+                            Log.Error("Brute forcing has failed many times, so make sure you login on a freshly launched client. Or something else could have happened idk");
+                            Environment.Exit(-3);
                         }
                     }
+                    if (item.GetUInt16(0, true) == 0x4567)
+                    {
+                        ParsePacketFromData(encryptedPacket);
+                    }
+                    else if(!_sessionKey.HasBeenSet())
+                    {
+                        //we may need to bruteforce
+                        Log.Warning("Encrypted Packet got through lol");
+                        // _sessionKey.TaskFlag().Wait();
+                        //should be fine because we store the time 
+                        //Queue.Enqueue(encryptedPacket);
+                    }
+                    else
+                    {
+                      Log.Warning("There was a false positive with the bruteforcer somehow");
+                      Log.Information("@{slay}" ,encryptedPacket.Data);
+                    }
                 }
-            Thread.Sleep(50);
-            // Log.Debug("hi");
-
-        }
-        
-
+            }
         // SpinWait.SpinUntil(()=>Queue.IsEmpty);
     }
     
@@ -164,9 +152,7 @@ public class PacketProcessor
             };
             
             var type = packet.PacketType;
-
-            Log.Information($"{count++} {type}");
-
+            
             if (type == Opcode.GetPlayerTokenRsp)
             {
                 //ideally we do it based on tokenreq but unless your ping is like 3000 we should be fine

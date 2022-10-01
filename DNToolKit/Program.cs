@@ -15,7 +15,7 @@ public class Program
     public static Sniffer.Sniffer Sniffer = null!;
 
     public static ushort GameMajorVersion = 3;
-    public static ushort GameMinorVersion = 0;
+    public static ushort GameMinorVersion = 1;
     
 
     private static string _configName = "./config.json";
@@ -23,9 +23,16 @@ public class Program
 
     public static void Main(string[] args)
     {
+        #if DEBUG
+        args = new[]
+        {
+            @"C:\Users\admin\Documents\Github\DNToolKit\DNToolKit\bin\Debug\net6.0\Captures\2.8_9-08-2022_02-07-21.pcap",
+            @".\out.dntkap"
+        };
+        #endif
 
         
-        Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console().CreateLogger();
+        Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
         Log.Information("DNToolKit CLI for v3.0");
         if (args.Length < 2)
         {
@@ -56,18 +63,23 @@ public class Program
         ProtobufFactory.Initialize();
 
         Log.Information("Ready! Hit Control + C to stop...");
-        Sniffer.AddPcap(args[0]);
+        
+        Task.Run(() =>
+        {
+            Sniffer.AddPcap(args[0]);
+        }).Wait();
+        
 
         //Capture.ParseFromBytes(File.ReadAllBytes("./Captures/"));
 
         // Console.CancelKeyPress  += Close;
         // AppDomain.CurrentDomain.ProcessExit += Close;
 
-        Stop();
-
-        // tcs.Task.Wait();
     }
-
+    public static uint Now()
+    {
+        return Convert.ToUInt32((DateTime.UtcNow.Ticks - DateTime.UnixEpoch.Ticks) / 10000000);
+    }
     private static void Close(object? sender, ConsoleCancelEventArgs e)
     {        
         e.Cancel = true;
