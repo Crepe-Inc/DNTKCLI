@@ -65,7 +65,7 @@ public class AbilityInvokeProcessor
             switch (abilityInvokeEntry.ArgumentType)
             {
                 //todo: HANDLE ALL OF THESE AT LEAST(since gc handles them)
-                case AbilityInvokeArgument.MetaModifierChange:
+                 case AbilityInvokeArgument.MetaModifierChange:
                     th.AbilityData = AbilityMetaModifierChange.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
                     break;
                 case AbilityInvokeArgument.MetaReinitOverridemap:
@@ -100,6 +100,124 @@ public class AbilityInvokeProcessor
                 case AbilityInvokeArgument.None:
                     th.AbilityData = abilityInvokeEntry.AbilityData.ToBase64();
                     break;
+                case AbilityInvokeArgument.ActionTriggerAbility:
+                    th.AbilityData = AbilityActionTriggerAbility.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.ActionSetRandomOverrideMapValue:
+                    th.AbilityData =
+                        AbilityActionSetRandomOverrideMapValue.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MetaCommandModifierChangeRequest:
+                    th.AbilityData = AbilityMetaModifierChange.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MetaSpecialFloatArgument:
+                    th.AbilityData = AbilityMetaSpecialFloatArgument.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MetaAddOrGetAbilityAndTrigger:
+                    th.AbilityData =
+                        AbilityMetaAddOrGetAbilityAndTrigger.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MetaSetKilledState:
+                    th.AbilityData = AbilityMetaSetKilledState.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MetaSetAbilityTrigger:
+                    th.AbilityData = AbilityMetaSetAbilityTrigger.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MetaSetModifierApplyEntity:
+                    th.AbilityData =
+                        AbilityMetaSetModifierApplyEntityId.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MetaElementReactionVisual:
+                    th.AbilityData = AbilityMetaElementReactionVisual.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MetaSetPoseParameter:
+                    th.AbilityData = AbilityMetaSetPoseParameter.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MetaUpdateBaseReactionDamage:
+                    th.AbilityData =
+                        AbilityMetaUpdateBaseReactionDamage.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MetaLoseHp:
+                    th.AbilityData = AbilityMetaLoseHp.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.ActionSetCrashDamage:
+                    th.AbilityData = AbilityActionSetCrashDamage.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.ActionEffect:
+                    //
+                    break;
+                case AbilityInvokeArgument.ActionSummon:
+                    th.AbilityData = AbilityActionSummon.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.ActionBlink:
+                    th.AbilityData = AbilityActionBlink.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.ActionApplyLevelModifier:
+                    th.AbilityData = AbilityApplyLevelModifier.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.ActionServerMonsterLog:
+                    th.AbilityData = AbilityActionServerMonsterLog.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.ActionCreateTile:
+                    th.AbilityData = AbilityActionCreateTile.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.ActionDestroyTile:
+                    th.AbilityData = AbilityActionDestroyTile.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.ActionFireAfterImage:
+                    th.AbilityData = AbilityActionFireAfterImage.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MixinAvatarSteerByCamera:
+                    th.AbilityData = AbilityMixinAvatarSteerByCamera.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MixinWindZone:
+                    th.AbilityData = AbilityMixinWindZone.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MixinEliteShield:
+                    th.AbilityData = AbilityMixinEliteShield.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MixinElementShield:
+                    th.AbilityData = AbilityMixinElementShield.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MixinGlobalShield:
+                    th.AbilityData = AbilityMixinGlobalShield.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MixinShieldBar:
+                    th.AbilityData = AbilityMixinShieldBar.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MixinWindSeedSpawner:
+                    th.AbilityData = AbilityMixinWindSeedSpawner.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MixinFieldEntityCountChange:
+                    th.AbilityData = AbilityMixinFieldEntityCountChange.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MixinScenePropSync:
+                    th.AbilityData = AbilityMixinScenePropSync.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+                case AbilityInvokeArgument.MixinWidgetMpSupport:
+                    th.AbilityData = AbilityMixinWidgetMpSupport.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
+
+                    
+                    //nothing obvious
+                case AbilityInvokeArgument.MixinMonsterDefend:
+                case AbilityInvokeArgument.MetaRemoveAbility:
+                case AbilityInvokeArgument.MetaClearOverrideParam:
+                case AbilityInvokeArgument.MetaGlobalFloatValue:                
+                case AbilityInvokeArgument.MetaClearGlobalFloatValue:
+                case AbilityInvokeArgument.MetaAbilityElementStrength:
+                case AbilityInvokeArgument.Unk2700Njhbfadeoon:
+                case AbilityInvokeArgument.Unk2700Egcifffllbg:
+                case AbilityInvokeArgument.Unk2700Ofdgfacoldi:
+                case AbilityInvokeArgument.Unk2700Kdpkjgjngfb:
+                case AbilityInvokeArgument.Unk2700Fnanddpdlol:
+                case AbilityInvokeArgument.Unk2700Jdddljelblj:
+                case AbilityInvokeArgument.Unk3000Bnecpacgkhp:
+                case AbilityInvokeArgument.Unk3000Lgipocbhkal:
+                case AbilityInvokeArgument.Unk3000Efjigceghjg:
+                case AbilityInvokeArgument.Unk3000Eeanhjoneep:
+                case AbilityInvokeArgument.Unk3000Adehjmkkbjd:
+
                 default:
                     //default
                     th.AbilityData = abilityInvokeEntry.AbilityData.ToBase64();
