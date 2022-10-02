@@ -72,10 +72,10 @@ public class Packet
         try
         {
             Dictionary<string, object> jsonobj = new();
-            jsonobj.Add("time", Metadata.SentMs);
-            jsonobj.Add("data", PacketData);
-            jsonobj.Add("cmd", PacketType.ToString());
-            jsonobj.Add("sender", (int)Sender);
+            jsonobj.Add("PacketHead", Metadata);
+            jsonobj.Add("PacketData", PacketData);
+            jsonobj.Add("CmdID", PacketType.ToString());
+            jsonobj.Add("Sender", (int)Sender);
 
             return jsonobj;
             
