@@ -197,13 +197,15 @@ public class AbilityInvokeProcessor
                 case AbilityInvokeArgument.MixinWidgetMpSupport:
                     th.AbilityData = AbilityMixinWidgetMpSupport.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
                     break;
-
+                case AbilityInvokeArgument.MetaGlobalFloatValue:
+                    th.AbilityData = AbilityScalarValueEntry.Parser.ParseFrom(abilityInvokeEntry.AbilityData);
+                    break;
                     
                     //nothing obvious
                 case AbilityInvokeArgument.MixinMonsterDefend:
                 case AbilityInvokeArgument.MetaRemoveAbility:
                 case AbilityInvokeArgument.MetaClearOverrideParam:
-                case AbilityInvokeArgument.MetaGlobalFloatValue:                
+
                 case AbilityInvokeArgument.MetaClearGlobalFloatValue:
                 case AbilityInvokeArgument.MetaAbilityElementStrength:
                 case AbilityInvokeArgument.Unk2700Njhbfadeoon:

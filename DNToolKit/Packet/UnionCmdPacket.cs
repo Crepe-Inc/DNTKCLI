@@ -20,14 +20,10 @@ public class UnionCmdPacket : Packet
     }
 
     public OnionCmd DummyPacketData;
-    public override object? GetObj()
+    public override Dictionary<string, object> GetObj()
     {
-        Dictionary<string, object> jsonobj = new();
-        jsonobj.Add("PacketHead", Metadata);
-        jsonobj.Add("PacketData", DummyPacketData);
-        jsonobj.Add("CmdID", PacketType.ToString());
-        jsonobj.Add("Sender", (int)Sender);
-
+        Dictionary<string, object> jsonobj = base.GetObj();
+        jsonobj.Add("data", DummyPacketData);
         return jsonobj;
 
 

@@ -243,14 +243,13 @@ public class PacketProcessor
     private class FakePacket<T>: Packet.Packet
     {
         public T DummyPacketData;
-        public override object? GetObj()
+        public override Dictionary<string, object> GetObj()
         {
 
-            Dictionary<string, object> jsonobj = new();
-            jsonobj.Add("time", Metadata.SentMs);
+            Dictionary<string, object> jsonobj = base.GetObj();
             jsonobj.Add("data", DummyPacketData);
-            jsonobj.Add("cmd", PacketType.ToString());
-            jsonobj.Add("sender", (int)Sender);
+            
+            
 
             return jsonobj;
         }
