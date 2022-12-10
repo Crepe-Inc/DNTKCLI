@@ -44,10 +44,10 @@ public class CombatInvokeProcessor
                     cumbat.CombatData = EvtBeingHitInfo.Parser.ParseFrom(invoke.CombatData);
                     // Log.Information("@{data}", cumbat.CombatData);
                     break;
-                case CombatTypeArgument.Unk2700Kpdnfkcmkpg:
-                    //healing packets
-                    cumbat.CombatData = new HealInvoke(Unk2700_BEINCMBJDAA_ClientReq.Parser.ParseFrom(invoke.CombatData));
-                    break;
+                // case CombatTypeArgument.Unk2700Kpdnfkcmkpg:
+                //     //healing packets
+                //     cumbat.CombatData = new HealInvoke(Unk2700_BEINCMBJDAA_ClientReq.Parser.ParseFrom(invoke.CombatData));
+                //     break;
                 default:
                     cumbat.CombatData = invoke.CombatData.ToBase64();
                     break;
