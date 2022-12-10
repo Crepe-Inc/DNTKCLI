@@ -17,6 +17,13 @@
     </ItemGroup>
     <ItemGroup>
         <Protobuf Include="Proto/*.proto" ProtoRoot="Proto" GrpcServices="None" />
+        <Protobuf Update="Proto\Empty.proto">
+          <Access>Public</Access>
+          <ProtoCompile>True</ProtoCompile>
+          <CompileOutputs>True</CompileOutputs>
+          <OutputDir>obj\Debug\net6.0\</OutputDir>
+          <Generator>MSBuild:Compile</Generator>
+        </Protobuf>
     </ItemGroup>
 
 </Project>

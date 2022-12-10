@@ -200,23 +200,23 @@ public class AbilityInvokeProcessor
 
                     
                     //nothing obvious
-                case AbilityInvokeArgument.MixinMonsterDefend:
-                case AbilityInvokeArgument.MetaRemoveAbility:
-                case AbilityInvokeArgument.MetaClearOverrideParam:
-                case AbilityInvokeArgument.MetaGlobalFloatValue:                
-                case AbilityInvokeArgument.MetaClearGlobalFloatValue:
-                case AbilityInvokeArgument.MetaAbilityElementStrength:
-                case AbilityInvokeArgument.Unk2700Njhbfadeoon:
-                case AbilityInvokeArgument.Unk2700Egcifffllbg:
-                case AbilityInvokeArgument.Unk2700Ofdgfacoldi:
-                case AbilityInvokeArgument.Unk2700Kdpkjgjngfb:
-                case AbilityInvokeArgument.Unk2700Fnanddpdlol:
-                case AbilityInvokeArgument.Unk2700Jdddljelblj:
-                case AbilityInvokeArgument.Unk3000Bnecpacgkhp:
-                case AbilityInvokeArgument.Unk3000Lgipocbhkal:
-                case AbilityInvokeArgument.Unk3000Efjigceghjg:
-                case AbilityInvokeArgument.Unk3000Eeanhjoneep:
-                case AbilityInvokeArgument.Unk3000Adehjmkkbjd:
+                // case AbilityInvokeArgument.MixinMonsterDefend:
+                // case AbilityInvokeArgument.MetaRemoveAbility:
+                // case AbilityInvokeArgument.MetaClearOverrideParam:
+                // case AbilityInvokeArgument.MetaGlobalFloatValue:                
+                // case AbilityInvokeArgument.MetaClearGlobalFloatValue:
+                // case AbilityInvokeArgument.MetaAbilityElementStrength:
+                // case AbilityInvokeArgument.Unk2700Njhbfadeoon:
+                // case AbilityInvokeArgument.Unk2700Egcifffllbg:
+                // case AbilityInvokeArgument.Unk2700Ofdgfacoldi:
+                // case AbilityInvokeArgument.Unk2700Kdpkjgjngfb:
+                // case AbilityInvokeArgument.Unk2700Fnanddpdlol:
+                // case AbilityInvokeArgument.Unk2700Jdddljelblj:
+                // case AbilityInvokeArgument.Unk3000Bnecpacgkhp:
+                // case AbilityInvokeArgument.Unk3000Lgipocbhkal:
+                // case AbilityInvokeArgument.Unk3000Efjigceghjg:
+                // case AbilityInvokeArgument.Unk3000Eeanhjoneep:
+                // case AbilityInvokeArgument.Unk3000Adehjmkkbjd:
 
                 default:
                     //default
