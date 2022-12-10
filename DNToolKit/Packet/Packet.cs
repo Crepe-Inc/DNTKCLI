@@ -1,15 +1,8 @@
-﻿using System.Text;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using Common;
+﻿using Common;
 using Common.Protobuf;
-using DNToolKit.Frontend;
 using DNToolKit.Sniffer;
 using Google.Protobuf;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Bson;
 using Serilog;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace DNToolKit.Packet;
 
@@ -66,7 +59,7 @@ public class Packet
         
     }
 
-    public virtual Dictionary<string, object> GetObj()
+    public virtual Dictionary<string, object>? GetObj()
     {
 
         try
@@ -74,9 +67,8 @@ public class Packet
             Dictionary<string, object> jsonobj = new();
             jsonobj.Add("PacketHead", Metadata);
             jsonobj.Add("PacketData", PacketData);
-            jsonobj.Add("CmdID", PacketType);// just the id 
+            jsonobj.Add("CmdID", PacketType.ToString());
             jsonobj.Add("Sender", (int)Sender);
-            jsonobj.Add("RawBytes", Convert.ToBase64String(ProtobufBytes));
 
             return jsonobj;
             
